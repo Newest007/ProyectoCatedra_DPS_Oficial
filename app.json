@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "linear",
+    "slug": "linear",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "linear"
+}
