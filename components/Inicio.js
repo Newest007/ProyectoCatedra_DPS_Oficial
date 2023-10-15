@@ -23,8 +23,8 @@ const Inicio = () => {
 
         </Modal>
 
-        <View style={{width:430, height: 150, backgroundColor:'#cdcbf0',}}>
-            <Text style={{ fontSize: 20, textAlign: 'center', alignItems: 'center', marginTop:10 }}>
+        <View style={{width:430, height: 135, backgroundColor:'#cdcbf0',}}>
+            <Text style={{ fontSize: 20, textAlign: 'center', alignItems: 'center', marginTop:10, marginRight:40, }}>
                 Hola.. Adonde deseas viajar
             </Text>
             <TextInput
@@ -33,52 +33,80 @@ const Inicio = () => {
                 alignSelf: 'center',
                 fontSize: 15,
                 marginTop:20,
-                marginLeft: 2,
+                marginRight:40,
                 color: 'black',
                 backgroundColor: '#f3f3f3',
                 padding: 10,
                 borderRadius:18,
-                width:350
+                width:300,
             }}
             placeholder="Selecciona tu destino"
             />
-
-
         </View>
 
 
 
         <View style={styles.contenedor}>
 
-        <Text style={styles.tituloini}>Vuelos en promocion       
-        <Text style={{fontSize:15, textDecorationLine:'underline', color:'blue'}}>Mas Promociones</Text></Text>
-                <View style={styles.listado}>
-                    
-                    <View style={styles.listaItem}>
+            <Text style={styles.tituloinicio}>Vuelos en promocion       
+            <Text style={{fontSize:15, textDecorationLine:'underline', color:'blue'}}>Mas Promociones</Text>
+            </Text>
+            <View style={styles.listado}>
+                
+                <View style={styles.listaItem}>
+                    <View style={styles.itemContainer}>
                         <Image
                         style={styles.imgini}
                         source={require('../src/img/ny.jpg')}
                         />
+                        <Text style={styles.tituloini}>Nueva York</Text>
+                        <TouchableHighlight style={styles.boton}>
+                        <Text style={styles.botonTexto}>USD $150</Text>
+                        </TouchableHighlight>
                     </View>
-                    <View style={styles.listaItem}>
+                </View>
+
+                <View style={styles.listaItem}>
+                    <View style={styles.itemContainer}>
                         <Image
                         style={styles.imgini}
                         source={require('../src/img/lima.jpg')}
                         />
+                    <Text style={styles.tituloini}>Lima</Text>
+                        <TouchableHighlight style={styles.boton}>
+                            <Text style={styles.botonTexto}>USD $150</Text>
+                        </TouchableHighlight>
                     </View>
-                    <View style={styles.listaItem}>
+                </View>
+
+                <View style={styles.listaItem}>
+                    <View style={styles.itemContainer}>
                         <Image
                         style={styles.imgini}
                         source={require('../src/img/los-angeles.jpg')}
                         />
+                        <Text style={styles.tituloini}>Los Angeles</Text>
+                        <TouchableHighlight style={styles.boton}>
+                            <Text style={styles.botonTexto}>USD $150</Text>
+                        </TouchableHighlight>
                     </View>
-                    <View style={styles.listaItem}>
+                </View>
+
+                <View style={styles.listaItem}>
+                    <View style={styles.itemContainer}>
                         <Image
                         style={styles.imgini}
                         source={require('../src/img/rio-j.jpg')}
                         />
+                        <Text style={styles.tituloini}>Río de Janeiro</Text>
+                        <TouchableHighlight style={styles.boton}>
+                            <Text style={styles.botonTexto}>USD $150</Text>
+                        </TouchableHighlight>
                     </View>
                 </View>
+            </View>
+
+
             <Text style={styles.titulo}>¿Que hacer en El Salvador?</Text>
             <ScrollView horizontal>
                 <View>
@@ -160,7 +188,7 @@ const styles=StyleSheet.create({
         marginVertical:5,
         borderRadius:15
     },
-    tituloini:{
+    tituloinicio:{
         fontWeight: 'bold',
         fontSize:20,
         marginVertical:10
@@ -177,7 +205,8 @@ const styles=StyleSheet.create({
         flexWrap:'wrap',
         justifyContent:'space-between',
         marginLeft:2,
-        marginRight:2
+        marginRight:2,
+        marginTop:10
     },
     vistaModal:{
         flex:1,
@@ -194,7 +223,41 @@ const styles=StyleSheet.create({
         fontWeight:'bold',
         fontSize:14,
         justifyContent:'center'
-    }
+    },
+    itemContainer: {
+        width: '100%',
+        marginBottom: 10,
+        borderRadius: 15,
+        overflow: 'hidden',
+    },
+    tituloini: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: '#475657',
+        textDecorationLine:'underline'
+    },
+    boton: {
+        position: 'absolute',
+        bottom: 10,
+        left: 10,
+        backgroundColor: 'white',
+        paddingVertical: 5,
+        paddingHorizontal: 15,
+        borderRadius: 30,
+        marginLeft:30,
+        marginBottom:30,
+        borderWidth: 3, 
+        borderColor: '#FFF', 
+        opacity:0.5
+    },
+
+    botonTexto: {
+        color: 'black', 
+        fontWeight: 'bold',
+      },
 })
 
 export default Inicio;

@@ -97,7 +97,7 @@ const Login = () => {
                 />
 
                 <TextInput onChangeText={(text) => setEmail(text)} style={styles.textInput} placeholder="Enter Your Email" />
-                <TextInput onChangeText={(text) => setPassword(text)} style={styles.textInput} placeholder="Enter Your Password" />
+                <TextInput  secureTextEntry={true} onChangeText={(text) => setPassword(text)} style={styles.textInput} placeholder="Enter Your Password" />
 
                 <View style={styles.buttonContainer}>
                     <Button

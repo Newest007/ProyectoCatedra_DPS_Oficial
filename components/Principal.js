@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, StatusBar } from 'react-native';
 //import Login from './components/login';
 import PagInicio from './Inicio';
 import Search from './Search';
+import Background from './registro';
 //import Account from './components/account';
 
 
@@ -50,7 +51,8 @@ export default function Principal() {
         }}
       />
 
-      <Tab.Screen name="Ajustes" component={SettingsScreen} 
+      <Tab.Screen name="Ajustes" 
+      component={SettingsScreen} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcons name="cog" color={color} size={size} />
@@ -58,7 +60,7 @@ export default function Principal() {
         }}
       />
 
-      <Tab.Screen name="Cuenta" component={Search} 
+      <Tab.Screen name="Cuenta" component={Background} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcons name="user-o" color={color} size={size} />

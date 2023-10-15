@@ -35,15 +35,14 @@ const Background = ({ children }) => {
 
                 <View style={styles.buttonContainer}>
                     <Button
-                        title="Sign Up"
+                        title="Guardar Datos"
                         color="#0e64d1"
                         onPress={() => {
                             // manejo boton
                         }}
                     />
                 </View>
-
-                <Text style={styles.text}>Already Have An Account? Login</Text>
+                
             </View>
 
             {children}
