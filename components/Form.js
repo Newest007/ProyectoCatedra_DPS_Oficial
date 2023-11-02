@@ -1,8 +1,57 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, SafeAreaView, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, Button, View, TextInput, SafeAreaView, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useNavigation } from '@react-navigation/native';
 
 export default function Form() {
+
+    const [userName, setUserName] = useState('');
+    const [userLastName, setUserLastName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        const obtenerDatosUsuario = async () => {
+          try {
+            const nombre = await AsyncStorage.getItem('userName');
+            const apellido = await AsyncStorage.getItem('userFamily')
+            const correo = await AsyncStorage.getItem('userEmail');
+    
+            if (correo !== null) {
+              setUserEmail(correo);
+            }
+            if (nombre !== null) {
+              setUserName(nombre);
+            }
+            if (apellido !== null) {
+              setUserLastName(apellido);
+            }
+
+
+          } catch (error) {
+            console.error('Error al obtener los datos del usuario:', error);
+          }
+        };
+    
+        obtenerDatosUsuario();
+    }, []);
+
+    async function signOut () {
+        try {
+            await GoogleSignin.signOut();
+            return(
+                AsyncStorage.clear(),
+                navigation.navigate('Login')
+            )
+            //setState({ user: null }); // Remember to remove the user from your app's state as well
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <SafeAreaView>
             <View style={{ alignItems: "center", height: "100%", justifyContent: "center" }}>
@@ -22,15 +71,15 @@ export default function Form() {
                 }}>
                     <View>
                         <Text>Nombre</Text>
-                        <TextInput style={styles.inputs} />
+                        <TextInput style={styles.inputs}>{userName}</TextInput>
                     </View>
                     <View>
                         <Text>Apellido</Text>
-                        <TextInput style={styles.inputs} />
+                        <TextInput style={styles.inputs}>{userLastName}</TextInput>
                     </View>
                     <View>
                         <Text>Correo Electronico</Text>
-                        <TextInput style={styles.inputs} />
+                        <TextInput style={styles.inputs}>{userEmail}</TextInput>
                     </View>
                     <View>
                         <Text>Pasaporte</Text>
@@ -47,6 +96,11 @@ export default function Form() {
                         </View>
                     </View>
                 </View>
+                <Button
+                    title="Cerrar Sesión"
+                    color="#0e64d1"
+                    onPress={()=>signOut()}
+                />
             </View>
         </SafeAreaView>
     );

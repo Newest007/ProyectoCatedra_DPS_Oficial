@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, TextInput, Button, SafeAreaView, Image, Alert } from 'react-native';
 import Svg, { Defs, Rect, LinearGradient, Stop } from 'react-native-svg';
 
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
+import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 import {initializeApp} from 'firebase/app';
 import { firebaseConfig } from '../firebase-config';
 
@@ -11,6 +11,7 @@ import { firebaseConfig } from '../firebase-config';
 import { useNavigation } from '@react-navigation/native';
 import { _singInWithGoogle } from '../config/firebase/GoogleSingIn';
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const FROM_COLOR = 'rgba(247, 247, 247, 1)';
@@ -18,33 +19,35 @@ const TO_COLOR = 'rgba(45, 40, 122, 1)';
 
 const Login = () => {
 
-    const [email, setEmail] = React.useState('');
+    const [correo, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const navigation = useNavigation();
-
+    
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const handleCreateAccount = () => {
-        createUserWithEmailAndPassword(auth,email,password)
-        .then((userCredential)=>{
-            console.log('Account created')
-            const user = userCredential.user;
-            console.log(user)
-        })
-        .catch(error => {
-            console.log(error)
-            Alert.alert(error.message)
-        })
-    }
+    useEffect(() => {
+        const limpiarAsyncStorage = async () => {
+          try {
+            await AsyncStorage.clear();
+            console.log('AsyncStorage limpiado con éxito.');
+          } catch (error) {
+            console.error('Error al limpiar AsyncStorage:', error);
+          }
+        };
+    
+        limpiarAsyncStorage();
+    }, []);
     
     const handleSignIn = () => {
-        signInWithEmailAndPassword(auth,email,password)
+        signInWithEmailAndPassword(auth,correo,password)
         .then((userCredential)=> {
             console.log('Signed In!')
             const user = userCredential.user;
             console.log(user)
-            navigation.replace('Principal')
+            AsyncStorage.setItem('userEmail', correo);
+            navigation.navigate('Principal')
+            
         })
         .catch(error => {
             console.log(error)
@@ -57,22 +60,13 @@ const Login = () => {
                 console.log('=> Error no data')
                 return 
             }
-            console.log('=> success', data)
-            navigation.replace('Principal')
+            console.log('=> success', data);
+            AsyncStorage.setItem('userName', data.user.givenName);
+            AsyncStorage.setItem('userFamily', data.user.familyName);
+            AsyncStorage.setItem('userEmail', data.user.email);
+            navigation.navigate('Principal')
         })
     }
-    
-     async function signOut () {
-        try {
-            await GoogleSignin.signOut();
-            return(
-                <Login/>
-            )
-            //setState({ user: null }); // Remember to remove the user from your app's state as well
-          } catch (error) {
-            console.error(error);
-          }
-      };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -109,21 +103,14 @@ const Login = () => {
                     <Button
                         title="Crear Cuenta"
                         color="#0e64d1"
-                        onPress={handleCreateAccount}
+                        onPress={()=>navigation.navigate('Registro')}
                     />
                     </View>
                     <View style={styles.google}>
                     <Button
-                        title="Sign in with google"
+                        title="Iniciar Sesión con Google"
                         color="#0e64d1"
                         onPress={()=>googleSignIn()}
-                    />
-                    </View>
-                    <View style={styles.google}>
-                    <Button
-                        title="Sign out"
-                        color="#0e64d1"
-                        onPress={()=>signOut()}
                     />
                     </View>
                 </View>

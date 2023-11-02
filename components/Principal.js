@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, StatusBar } from 'react-native';
 //import Login from './components/login';
 import PagInicio from './Inicio';
 import Search from './Search';
-import Background from './registro';
+import Form from './Form';
 //import Account from './components/account';
 
 
@@ -60,7 +60,7 @@ export default function Principal() {
         }}
       />
 
-      <Tab.Screen name="Cuenta" component={Background} 
+      <Tab.Screen name="Cuenta" component={Form} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcons name="user-o" color={color} size={size} />
@@ -72,12 +72,3 @@ export default function Principal() {
   );
  
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

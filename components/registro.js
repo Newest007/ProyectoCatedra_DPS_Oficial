@@ -1,11 +1,50 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, Button, SafeAreaView, Image } from 'react-native';
+import { View, StyleSheet, TextInput, Button, SafeAreaView, Image, Alert } from 'react-native';
 import Svg, { Defs, Rect, LinearGradient, Stop } from 'react-native-svg';
+
+import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
+import {initializeApp} from 'firebase/app';
+import { firebaseConfig } from '../firebase-config';
+import { useNavigation } from '@react-navigation/native';
 
 const FROM_COLOR = 'rgba(247, 247, 247, 1)';
 const TO_COLOR = 'rgba(45, 40, 122, 1)';
 
-const Background = ({ children }) => {
+const Registro = ({ children }) => {
+
+    //const [usuario, setUser] = React.useState('');
+    const [correo, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confPass, setConfPass] = React.useState('');
+
+    const navigation = useNavigation();
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const handleCreateAccount = () => {
+
+        if(password == confPass){
+            createUserWithEmailAndPassword(auth,correo,password)
+            .then((userCredential)=>{
+                console.log('Account created')
+                const user = userCredential.user;
+                Alert.alert('Usuario creado correctamente!');
+                AsyncStorage.setItem('userEmail', correo);
+                navigation.navigate('Principal');
+                console.log(user);
+            })
+            .catch(error => {
+                console.log(error)
+                Alert.alert(error.message)
+            })
+        }
+        else{
+            Alert.alert('Las contraseñas no coinciden')
+        }
+    }
+
+
     return (
         <SafeAreaView style={styles.container}>
             
@@ -28,18 +67,15 @@ const Background = ({ children }) => {
                     
                 />
 
-                <TextInput style={styles.textInput} placeholder="Enter Your User Name" />
-                <TextInput style={styles.textInput} placeholder="Enter Your Email" />
-                <TextInput style={styles.textInput} keyboardType="phone-pad"  placeholder="Enter Your Phone Number" />
-                <TextInput style={styles.textInput} placeholder="Enter Your Password" />
+                <TextInput onChangeText={(text) => setEmail(text)} style={styles.textInput} placeholder="Ingresa tu Correo" />
+                <TextInput secureTextEntry={true} onChangeText={(text) => setPassword(text)} style={styles.textInput} placeholder="Ingresa tu Contraseña" />
+                <TextInput secureTextEntry={true} onChangeText={(text) => setConfPass(text)} style={styles.textInput} placeholder="Confirma tu contraseña" />
 
                 <View style={styles.buttonContainer}>
                     <Button
                         title="Guardar Datos"
                         color="#0e64d1"
-                        onPress={() => {
-                            // manejo boton
-                        }}
+                        onPress={handleCreateAccount}
                     />
                 </View>
                 
@@ -96,4 +132,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Background;
+export default Registro;
