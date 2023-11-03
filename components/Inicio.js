@@ -2,47 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image, Text, ScrollView, Modal, Button, TouchableHighlight, SafeAreaView, TextInput } from "react-native";
 import axios from 'axios'
 import Card from "./Card";
+import ModalExample from "./Modal";
 
 const Inicio = () => {
 
     const [modalVisibleplaya, SetModalVisibleplaya] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [vuelos, setVuelos] = useState(null)
-    let headers = new Headers();
-
-    headers.append("Content-Type", "application/json");
-    headers.append("Accept", "application/json");
-    headers.append("Access-Control-Allow-Origin", "*");
-    headers.append("Access-Control-Allow-Headers", " X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
-    headers.append("Access-Control-Allow-Credentials", "false");
-    headers.append("GET", "POST", "OPTIONS");
-
-    useEffect(() => {
-        fetch("https://lis03l2023gc180313.000webhostapp.com/Oferta/index/2", {
-            method: "GET",
-            headers: headers
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('La respuesta de la red no fue exitosa');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setVuelos(data);
-                setLoading(false);
-                console.log(data)
-
-            })
-            .catch(error => {
-                console.error('Hubo un problema con la solicitud fetch:', error);
-            });
-    }, []);
-
-
-
-
-
 
     return (
         <>
@@ -91,17 +55,17 @@ const Inicio = () => {
                         <Text style={styles.tituloinicio}>Vuelos en promocion
                             <Text style={{ fontSize: 15, textDecorationLine: 'underline', color: 'blue' }}>Mas Promociones</Text>
                         </Text>
+
                         <View style={styles.listado}>
-
-                            {loading ? (
-                                <View><Text>Cargando...</Text></View>
-                            ) : (
-                                <Card vuelos={vuelos} />
-                            )}
-
+                            {
+                               <Card url={"https://lis03l2023gc180313.000webhostapp.com/Oferta/index/1"}/>
+                            }
+                            {
+                               <Card url={"https://lis03l2023gc180313.000webhostapp.com/Oferta/index/2"}/>
+                            }
                         </View>
 
-
+                       
                         <Text style={styles.titulo}>¿Que hacer en El Salvador?</Text>
                         <ScrollView horizontal>
                             <View>
