@@ -10,6 +10,7 @@ function Card({url}) {
     const [origen, setOrigen] = useState("")
     const [aerolinea, setAerolinea] = useState("")
     const [hora, setHora] = useState("")
+    const [listaVuelos, setListaVuelos] = useState("")
 
     let headers = new Headers();
 
@@ -39,13 +40,15 @@ function Card({url}) {
                 const origenes = data.map(vuelo => vuelo.Origen_v);
                 const aerolinea = data.map(vuelo => vuelo.Nombre_aerolinea);
                 const hora = data.map(vuelo => vuelo.Hora_salida)
+                const vuelos = data.map(vuelo => vuelo)
 
-                console.log("Precios:", precios);
                 setPrecio(precios)
                 setDestino(destinos)
                 setOrigen(origenes)
                 setAerolinea(aerolinea)
                 setHora(hora)
+                setListaVuelos(vuelos)
+
 
             } catch (error) {
                 console.error('Hubo un problema con la solicitud fetch:', error);
@@ -107,7 +110,8 @@ function Card({url}) {
                     <Text style={styles.botonTexto}>${precio}</Text>
                 </TouchableHighlight>
             </View>
-            {modal_render(aerolinea,origen, destino, precio)}
+            {modal_render(aerolinea,origen, destino, precio)
+            }
         </View>
 
     )

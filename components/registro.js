@@ -2,11 +2,13 @@ import React from 'react';
 import { View, StyleSheet, TextInput, Button, SafeAreaView, Image, Alert } from 'react-native';
 import Svg, { Defs, Rect, LinearGradient, Stop } from 'react-native-svg';
 
-import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
-import {initializeApp} from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../firebase-config';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import axios from 'axios';
 const FROM_COLOR = 'rgba(247, 247, 247, 1)';
 const TO_COLOR = 'rgba(45, 40, 122, 1)';
 
@@ -24,22 +26,47 @@ const Registro = ({ children }) => {
 
     const handleCreateAccount = () => {
 
-        if(password == confPass){
-            createUserWithEmailAndPassword(auth,correo,password)
-            .then((userCredential)=>{
-                console.log('Account created')
-                const user = userCredential.user;
-                Alert.alert('Usuario creado correctamente!');
-                AsyncStorage.setItem('userEmail', correo);
-                navigation.navigate('Principal');
-                console.log(user);
-            })
-            .catch(error => {
-                console.log(error)
-                Alert.alert(error.message)
-            })
+        if (password === confPass) {
+            createUserWithEmailAndPassword(auth, correo, password)
+                .then((userCredential) => {
+                    console.log('Account created')
+                    const user = userCredential.user;
+                    Alert.alert('Usuario creado correctamente!');
+                    AsyncStorage.setItem('userEmail', correo);
+                    navigation.navigate('Principal');
+
+                    const datosUsuario = new FormData();
+                    datosUsuario.append('Nombres', 'Omar');
+                    datosUsuario.append('Apellidos', 'Molina');
+                    datosUsuario.append('dui_passport', '12122323');
+                    datosUsuario.append('contrasenia', password);
+                    datosUsuario.append('correo_usuario', correo);
+                    
+                    const guardarDatos = async () => {
+                        try {
+                            const response = await axios.post('https://lis03l2023gc180313.000webhostapp.com/Usuario/index/', datosUsuario, {
+                                headers: {
+                                    'Accept': '*/*',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Connection': 'keep-alive',
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            });
+                    
+                            console.log(response.data);
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+                    }
+                    guardarDatos()
+                    //console.log(user);
+                })
+                .catch(error => {
+                    console.log(error)
+                    Alert.alert(error.message)
+                })
         }
-        else{
+        else {
             Alert.alert('Las contraseñas no coinciden')
         }
     }
@@ -47,7 +74,7 @@ const Registro = ({ children }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            
+
             <View style={styles.gradientContainer}>
                 <Svg height="100%" width="100%" style={StyleSheet.absoluteFillObject}>
                     <Defs>
@@ -64,7 +91,7 @@ const Registro = ({ children }) => {
                 <Image
                     style={styles.logo}
                     source={require('../src/img/Logo1-sfondo.png')}
-                    
+
                 />
 
                 <TextInput onChangeText={(text) => setEmail(text)} style={styles.textInput} placeholder="Ingresa tu Correo" />
@@ -78,7 +105,7 @@ const Registro = ({ children }) => {
                         onPress={handleCreateAccount}
                     />
                 </View>
-                
+
             </View>
 
             {children}
@@ -124,7 +151,7 @@ const styles = StyleSheet.create({
         height: 45,
         marginVertical: 10,
         borderRadius: 20,
-        
+
     },
     text: {
         color: 'white',

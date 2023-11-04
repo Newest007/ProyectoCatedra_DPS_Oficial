@@ -40,8 +40,10 @@ export default function Form() {
     }, []);
 
     async function signOut () {
-        try {
-            await GoogleSignin.signOut();
+        AsyncStorage.clear()
+        navigation.navigate('Login')
+        /**try {
+            //await GoogleSignin.signOut();
             return(
                 AsyncStorage.clear(),
                 navigation.navigate('Login')
@@ -49,7 +51,7 @@ export default function Form() {
             //setState({ user: null }); // Remember to remove the user from your app's state as well
         } catch (error) {
             console.error(error);
-        }
+        }*/
     };
 
     return (
