@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Modal,
   Button,
+  ScrollView,
 } from "react-native";
 //import Login from './components/login';
 import PagInicio from "./Inicio";
@@ -24,6 +25,8 @@ export default function Principal({url}) {
 
   function SettingsScreen() {
     const [modalVisibleResult, setModalVisibleResult] = useState(false);
+    const [flightData, setFlightData] = useState([]);
+    const [selectedFlight, setSelectedFlight] = useState(null);
 
     //Consulta que contiene todas las ofertas 
     let headers = new Headers();
@@ -47,6 +50,7 @@ export default function Principal({url}) {
                     throw new Error('La respuesta de la red no fue exitosa');
                 }
                 const data = await response.json();
+                setFlightData(data);
                 console.log(data)
             } catch (error) {
                 console.error('Hubo un problema con la solicitud fetch:', error);
@@ -58,58 +62,67 @@ export default function Principal({url}) {
 
 
     return (
-      <>
-        <View style={styles.maincontainer}>
-          <Modal
-            transparent={true}
-            animationType="slide"
-            visible={modalVisibleResult}
-            onRequestClose={() => {
-              alert("Modal has been closed.");
-            }}
-          >
-            <View style={styles.vistamodal}>
-              <View style={styles.modal}>
-                <Text style={styles.subtitulo}>Información del vuelo</Text>
-                <View style={{alignItems:'left',flex:1,margin:15,width:'100%'}}>
-                <Text>Pais Salida:</Text>
-                <Text>Pais Destino:</Text>
-                <Text>Hora de salida:</Text>
-                <Text>Fecha de salida:</Text>
-                <Text>Aerolinea:</Text>
-                <Text>Asientos disponibles:</Text>
-                <Text>Precio en oferta:</Text>
-                </View>
-                <View style={{flexDirection:'row', justifyContent:'space-evenly',width:'100%'}}>
-                <Button
-                  title="Cerrar"
-                  onPress={() => setModalVisibleResult(!modalVisibleResult)}
-                ></Button>
-                <Button
-                  title="Comprar"
-                  
-                ></Button>
-                </View>
-              </View>
-            </View>
-          </Modal>
-
-          <TouchableOpacity
-            onPress={() => setModalVisibleResult(!modalVisibleResult)}
-          >
-            <View style={styles.resultscontainer}>
-              <Text style={styles.midtextstyle}>De</Text>
-              <Text style={styles.textLeft}>LA</Text>
+      <ScrollView>
+      <View style={styles.maincontainer}>
+          {flightData.map((flight, index) => (
+              <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                      setSelectedFlight(flight); 
+                      setModalVisibleResult(true); 
+                  }}
+              >
+                  <View style={styles.resultscontainer}>
+                     
+                      <Text style={styles.midtextstyle}>De</Text>
+              <Text style={styles.textLeft}>{flight.Origen_v}</Text>
               <Text style={styles.midtextstyle}>A</Text>
-              <Text style={styles.textCenter}>SAL</Text>
+              <Text style={styles.textCenter}>{flight.Destino_v}</Text>
               <Text style={styles.midtextstyle}>Por tan solo:</Text>
-              <Text style={styles.textRight}>$200</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </>
-    );
-  }
+              <Text style={styles.textRight}>{flight.Precio}</Text>
+                  </View>
+              </TouchableOpacity>
+          ))}
+
+<Modal
+                transparent={true}
+                animationType="slide"
+                visible={modalVisibleResult}
+                onRequestClose={() => {
+                    alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.vistamodal}>
+                    <View style={styles.modal}>
+                        <Text style={styles.subtitulo}>Información del vuelo</Text>
+                        {selectedFlight && ( // Verifica si hay un vuelo seleccionado
+                            <View style={{alignItems:'left', margin: 15, width: '100%'}}>
+                                <Text>Pais Salida: {selectedFlight.Origen_v}</Text>
+                                <Text>Pais Destino: {selectedFlight.Destino_v}</Text>
+                                <Text>Hora de salida: {selectedFlight.Hora_salida}</Text>
+                                <Text>Fecha de salida: {selectedFlight.Fecha_inicio}</Text>
+                                <Text>Aerolinea: {selectedFlight.Nombre_aerolinea}</Text>
+                                <Text>Asientos disponibles: {selectedFlight.Asientos_disponibles}</Text>
+                                <Text>Precio en oferta: ${selectedFlight.Precio}</Text>
+                                {/* Otros detalles del vuelo */}
+                            </View>
+                        )}
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%' }}>
+                            <Button
+                                title="Cerrar"
+                                onPress={() => setModalVisibleResult(false)}
+                            />
+                            <Button
+                                title="Comprar"
+                            />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+      </View>
+      </ScrollView>
+  );
+}
 
   return (
     <Tab.Navigator
@@ -186,7 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "left",
     textAlignVertical: "center",
-    fontSize: 20,
+    fontSize: 10,
     height: "100%",
     color: "blue",
   },
@@ -194,7 +207,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     textAlignVertical: "center",
-    fontSize: 20,
+    fontSize: 10,
     height: "100%",
     color: "blue",
   },
@@ -202,7 +215,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "right",
     marginRight: 10,
-    fontSize: 20,
+    fontSize: 10,
     textAlignVertical: "center",
     height: "100%",
     color: "blue",
