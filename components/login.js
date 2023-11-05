@@ -14,9 +14,6 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-
-
-
 const FROM_COLOR = 'rgba(247, 247, 247, 1)';
 const TO_COLOR = 'rgba(45, 40, 122, 1)';
 
@@ -65,42 +62,9 @@ const Login = () => {
             }
             console.log('=> success', data);
             AsyncStorage.setItem('userName', data.user.givenName);
-            AsyncStorage.setItem('userFamily', data.user.familyName);
+            AsyncStorage.setItem('userLastName', data.user.familyName);
             AsyncStorage.setItem('userEmail', data.user.email);
-            axios.get(`https://lis03l2023gc180313.000webhostapp.com/Usuario/index/${data.user.email}`)
-                .then(response => {
-                    if(response.data === 0){
-                        const datosUsuario = new FormData();
-                        datosUsuario.append('Nombres', data.user.givenName);
-                        datosUsuario.append('Apellidos', data.user.familyName);
-                        datosUsuario.append('dui_passport', '12122323');
-                        datosUsuario.append('contrasenia', '123456');
-                        datosUsuario.append('correo_usuario', data.user.email);
-                        const guardarDatos = async () => {
-                            try {
-                                const response = await axios.post('https://lis03l2023gc180313.000webhostapp.com/Usuario/index/', datosUsuario, {
-                                    headers: {
-                                        'Accept': '*/*',
-                                        'Accept-Encoding': 'gzip, deflate, br',
-                                        'Connection': 'keep-alive',
-                                        'Content-Type': 'multipart/form-data'
-                                    }
-                                });
-                        
-                                console.log(response.data);
-                            } catch (error) {
-                                console.error('Error:', error);
-                            }
-                        }
-                        guardarDatos()
-                    }
-                    else{
-                        console.log(response.data)
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+
             navigation.navigate('Principal')
         })
     }

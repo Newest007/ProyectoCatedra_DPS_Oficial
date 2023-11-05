@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, Button, View, TextInput, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, Text, Button, View, TextInput, SafeAreaView, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 export default function Form() {
 
-    const [userName, setUserName] = useState('');
-    const [userLastName, setUserLastName] = useState('');
-    const [userEmail, setUserEmail] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [pasaporte, setPasaporte] = useState('');
+    const [correo, setCorreo] = useState('');
 
     const navigation = useNavigation();
 
@@ -17,17 +19,17 @@ export default function Form() {
         const obtenerDatosUsuario = async () => {
           try {
             const nombre = await AsyncStorage.getItem('userName');
-            const apellido = await AsyncStorage.getItem('userFamily')
+            const apellido = await AsyncStorage.getItem('userLastName')
             const correo = await AsyncStorage.getItem('userEmail');
     
             if (correo !== null) {
-              setUserEmail(correo);
+              setCorreo(correo);
             }
             if (nombre !== null) {
-              setUserName(nombre);
+              setNombre(nombre);
             }
             if (apellido !== null) {
-              setUserLastName(apellido);
+              setApellido(apellido);
             }
 
 
@@ -39,18 +41,61 @@ export default function Form() {
         obtenerDatosUsuario();
     }, []);
 
+
+    const registrarDatos = () => {
+        axios.get(`https://lis03l2023gc180313.000webhostapp.com/Usuario/index/${correo}`)
+            .then(response => {
+                if(response.data === 0){
+                    const datosUsuario = new FormData();
+                    datosUsuario.append('Nombres', nombre);
+                    datosUsuario.append('Apellidos', apellido);
+                    datosUsuario.append('dui_passport', pasaporte);
+                    datosUsuario.append('correo_usuario', correo);
+
+                    const guardarDatos = async () => {
+                        try {
+                            const response = await axios.post('https://lis03l2023gc180313.000webhostapp.com/Usuario/index/', datosUsuario, {
+                                headers: {
+                                    'Accept': '*/*',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Connection': 'keep-alive',
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            });
+                        
+                            console.log(response.data);
+                        } catch (error) {
+                                console.error('Error:', error);
+                        }
+                    }
+                    guardarDatos();
+                    Alert.alert('Datos guardados con éxito!');
+                }
+                else{
+                    console.log(response.data)
+                    Alert.alert('Ya existe un registro con este correo')
+                }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
     async function signOut () {
-       // AsyncStorage.clear(),
-        //navigation.navigate('Login')
-        try {
-            await GoogleSignin.signOut();
-            return(
-                AsyncStorage.clear(),
-                navigation.navigate('Login')
-            )
-            //setState({ user: null }); // Remember to remove the user from your app's state as well
-        } catch (error) {
-            console.error(error);
+        if(nombre!=''){
+            try {
+                await GoogleSignin.signOut();
+                return(
+                    AsyncStorage.clear(),
+                    navigation.navigate('Login')
+                )
+                //setState({ user: null }); // Remember to remove the user from your app's state as well
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        else{
+            navigation.navigate('Login');
         }
     };
 
@@ -73,19 +118,19 @@ export default function Form() {
                 }}>
                     <View>
                         <Text>Nombre</Text>
-                        <TextInput style={styles.inputs}>{userName}</TextInput>
+                        <TextInput onChangeText={(text) => setNombre(text)} style={styles.inputs}>{nombre}</TextInput>
                     </View>
                     <View>
                         <Text>Apellido</Text>
-                        <TextInput style={styles.inputs}>{userLastName}</TextInput>
+                        <TextInput onChangeText={(text) => setApellido(text)} style={styles.inputs}>{apellido}</TextInput>
                     </View>
                     <View>
                         <Text>Correo Electronico</Text>
-                        <TextInput style={styles.inputs}>{userEmail}</TextInput>
+                        <TextInput  editable={false} style={styles.inputs}>{correo}</TextInput>
                     </View>
                     <View>
                         <Text>Pasaporte</Text>
-                        <TextInput style={styles.inputs} />
+                        <TextInput onChangeText={(text) => setPasaporte(text)} style={styles.inputs}>{pasaporte}</TextInput>
                     </View>
                     <View>
                         <Text>Numero de Telefono</Text>
@@ -97,12 +142,19 @@ export default function Form() {
                             />
                         </View>
                     </View>
+                    <Button
+                    title="Guardar Datos"
+                    color="#0e64d1"
+                    onPress={()=>registrarDatos()}
+                    />
                 </View>
-                <Button
+                <View>
+                    <Button
                     title="Cerrar Sesión"
                     color="#0e64d1"
                     onPress={()=>signOut()}
-                />
+                    />
+                </View>
             </View>
         </SafeAreaView>
     );

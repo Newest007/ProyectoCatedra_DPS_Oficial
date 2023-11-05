@@ -15,6 +15,9 @@ const TO_COLOR = 'rgba(45, 40, 122, 1)';
 const Registro = ({ children }) => {
 
     //const [usuario, setUser] = React.useState('');
+    //const [nombre, setNombre] = React.useState('');
+    //const [apellido, setApellido] = React.useState('');
+    //const [pasaporte, setPasaporte] = React.useState('');
     const [correo, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confPass, setConfPass] = React.useState('');
@@ -32,34 +35,11 @@ const Registro = ({ children }) => {
                     console.log('Account created')
                     const user = userCredential.user;
                     Alert.alert('Usuario creado correctamente!');
+                    //AsyncStorage.setItem('userName', nombre);
+                    //AsyncStorage.setItem('userLastName', apellido);
+                    //AsyncStorage.setItem('userPassport', pasaporte);
                     AsyncStorage.setItem('userEmail', correo);
-
                     navigation.navigate('Principal');
-
-                    const datosUsuario = new FormData();
-                    datosUsuario.append('Nombres', 'Omar');
-                    datosUsuario.append('Apellidos', 'Molina');
-                    datosUsuario.append('dui_passport', '12122323');
-                    datosUsuario.append('contrasenia', password);
-                    datosUsuario.append('correo_usuario', correo);
-                    
-                    const guardarDatos = async () => {
-                        try {
-                            const response = await axios.post('https://lis03l2023gc180313.000webhostapp.com/Usuario/index/', datosUsuario, {
-                                headers: {
-                                    'Accept': '*/*',
-                                    'Accept-Encoding': 'gzip, deflate, br',
-                                    'Connection': 'keep-alive',
-                                    'Content-Type': 'multipart/form-data'
-                                }
-                            });
-                    
-                            console.log(response.data);
-                        } catch (error) {
-                            console.error('Error:', error);
-                        }
-                    }
-                    guardarDatos()
                     //console.log(user);
                 })
                 .catch(error => {

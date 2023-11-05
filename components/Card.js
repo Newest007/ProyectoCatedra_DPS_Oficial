@@ -1,7 +1,9 @@
 import React, { useState,useEffect } from 'react'
 import { View, StyleSheet, Image, Text, ScrollView, Modal, Button, TouchableHighlight, SafeAreaView, TextInput,TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 function Card({url}) {
+    const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
     const [vuelos, setVuelos] = useState(null)
     //Datos del vuelo
@@ -88,8 +90,8 @@ function Card({url}) {
                                 <Text style={{ color: 'white' }}>Salir</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => setOpenModal(false)} style={{ flex: 1, alignItems: 'center', backgroundColor: '#69C353', padding:5, borderRadius:10,marginLeft:5  }}>
-                                <Text style={{ color: 'white' }}>Continuar</Text>
+                            <TouchableOpacity onPress={() => {setOpenModal(false); navigation.navigate('CreditCard')}} style={{ flex: 1, alignItems: 'center', backgroundColor: '#69C353', padding:5, borderRadius:10,marginLeft:5  }}>
+                                <Text style={{ color: 'white' }}>Comprar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
