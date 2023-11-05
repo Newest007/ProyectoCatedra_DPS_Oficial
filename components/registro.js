@@ -33,6 +33,7 @@ const Registro = ({ children }) => {
                     const user = userCredential.user;
                     Alert.alert('Usuario creado correctamente!');
                     AsyncStorage.setItem('userEmail', correo);
+
                     navigation.navigate('Principal');
 
                     const datosUsuario = new FormData();
