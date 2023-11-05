@@ -58,12 +58,8 @@ const Inicio = () => {
                         </Text>
 
                         <View style={styles.listado}>
-                            {
-                               //<Card url={"https://lis03l2023gc180313.000webhostapp.com/Oferta/index/1"}/>
-                            }
-                            {
-                               //<Card url={"https://lis03l2023gc180313.000webhostapp.com/Oferta/index/2"}/>
-                            }
+                               <Card url={"https://lis03l2023gc180313.000webhostapp.com/Oferta/index/1"} />
+                               <Card url={"https://lis03l2023gc180313.000webhostapp.com/Oferta/index/2"} />
                         </View>
 
                        
