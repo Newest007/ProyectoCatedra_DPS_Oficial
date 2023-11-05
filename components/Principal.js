@@ -90,36 +90,40 @@ export default function Principal() {
         name="Inicio"
         component={PagInicio}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesomeIcons name="home" color={color} size={size} />
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (                  
+          <FontAwesomeIcons name="home" color={color} size={size} />   
           ),
         }}
-      />
+        />
 
-      <Tab.Screen
-        name="Buscar"
-        component={Search}
-        options={{
+
+      <Tab.Screen 
+      name="Buscar" 
+      component={Search} 
+      options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcons name="search" color={color} size={size} />
-          ),
-        }}
-      />
+            ),
+          }}
+          />
 
-      <Tab.Screen
-        name="Ajustes"
-        component={SettingsScreen}
-        options={{
+      <Tab.Screen name="Ajustes" 
+      component={SettingsScreen} 
+      options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcons name="cog" color={color} size={size} />
-          ),
-        }}
-      />
+            ),
+          }}
+          />
 
       <Tab.Screen
         name="Cuenta"
         component={Form}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcons name="user-o" color={color} size={size} />
           ),

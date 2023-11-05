@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, TextInput, Button, SafeAreaView, Image, Alert } from 'react-native';
 import Svg, { Defs, Rect, LinearGradient, Stop } from 'react-native-svg';
 
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
-import {initializeApp} from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../firebase-config';
 
 //import { NavigationContainer } from '@react-navigation/native';
@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { _singInWithGoogle } from '../config/firebase/GoogleSingIn';
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import axios from 'axios';
 
 const FROM_COLOR = 'rgba(247, 247, 247, 1)';
 const TO_COLOR = 'rgba(45, 40, 122, 1)';
@@ -22,55 +22,56 @@ const Login = () => {
     const [correo, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const navigation = useNavigation();
-    
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
     useEffect(() => {
         const limpiarAsyncStorage = async () => {
-          try {
-            await AsyncStorage.clear();
-            console.log('AsyncStorage limpiado con éxito.');
-          } catch (error) {
-            console.error('Error al limpiar AsyncStorage:', error);
-          }
+            try {
+                await AsyncStorage.clear();
+                console.log('AsyncStorage limpiado con éxito.');
+            } catch (error) {
+                console.error('Error al limpiar AsyncStorage:', error);
+            }
         };
-    
+
         limpiarAsyncStorage();
     }, []);
-    
+
     const handleSignIn = () => {
-        signInWithEmailAndPassword(auth,correo,password)
-        .then((userCredential)=> {
-            console.log('Signed In!')
-            const user = userCredential.user;
-            console.log(user)
-            AsyncStorage.setItem('userEmail', correo);
-            navigation.navigate('Principal')
-            
-        })
-        .catch(error => {
-            console.log(error)
-        })
+        signInWithEmailAndPassword(auth, correo, password)
+            .then((userCredential) => {
+                console.log('Signed In!')
+                const user = userCredential.user;
+                console.log(user)
+                AsyncStorage.setItem('userEmail', correo);
+                navigation.navigate('Principal')
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
-    async function googleSignIn(){
+    async function googleSignIn() {
         _singInWithGoogle().then(data => {
-            if(!data){
+            if (!data) {
                 console.log('=> Error no data')
-                return 
+                return
             }
             console.log('=> success', data);
             AsyncStorage.setItem('userName', data.user.givenName);
-            AsyncStorage.setItem('userFamily', data.user.familyName);
+            AsyncStorage.setItem('userLastName', data.user.familyName);
             AsyncStorage.setItem('userEmail', data.user.email);
+
             navigation.navigate('Principal')
         })
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            
+
             <View style={styles.gradientContainer}>
                 <Svg height="100%" width="100%" style={StyleSheet.absoluteFillObject}>
                     <Defs>
@@ -87,11 +88,11 @@ const Login = () => {
                 <Image
                     style={styles.logo}
                     source={require('../src/img/Logo1-sfondo.png')}
-                    
+
                 />
 
                 <TextInput onChangeText={(text) => setEmail(text)} style={styles.textInput} placeholder="Enter Your Email" />
-                <TextInput  secureTextEntry={true} onChangeText={(text) => setPassword(text)} style={styles.textInput} placeholder="Enter Your Password" />
+                <TextInput secureTextEntry={true} onChangeText={(text) => setPassword(text)} style={styles.textInput} placeholder="Enter Your Password" />
 
                 <View style={styles.buttonContainer}>
                     <Button
@@ -100,18 +101,18 @@ const Login = () => {
                         onPress={handleSignIn}
                     />
                     <View style={styles.google}>
-                    <Button
-                        title="Crear Cuenta"
-                        color="#0e64d1"
-                        onPress={()=>navigation.navigate('Registro')}
-                    />
+                        <Button
+                            title="Crear Cuenta"
+                            color="#0e64d1"
+                            onPress={() => navigation.navigate('Registro')}
+                        />
                     </View>
                     <View style={styles.google}>
-                    <Button
-                        title="Iniciar Sesión con Google"
-                        color="#0e64d1"
-                        onPress={()=>googleSignIn()}
-                    />
+                        <Button
+                            title="Iniciar Sesión con Google"
+                            color="#0e64d1"
+                            onPress={() => googleSignIn()}
+                        />
                     </View>
                 </View>
             </View>
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
         height: 45,
         marginVertical: 10,
         borderRadius: 20,
-        
+
     },
     text: {
         color: 'white',
