@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -19,11 +19,44 @@ import Form from "./Form";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesomeIcons from "react-native-vector-icons/FontAwesome";
 
-export default function Principal() {
+export default function Principal({url}) {
   const Tab = createBottomTabNavigator();
 
   function SettingsScreen() {
     const [modalVisibleResult, setModalVisibleResult] = useState(false);
+
+    //Consulta que contiene todas las ofertas 
+    let headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+    headers.append("Access-Control-Allow-Origin", "*");
+    headers.append("Access-Control-Allow-Headers", " X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+    headers.append("Access-Control-Allow-Credentials", "false");
+    headers.append("GET", "POST", "OPTIONS");
+
+    useEffect(() => {
+        const consultaApi = async () => {
+            try {
+                const response = await fetch('https://lis03l2023gc180313.000webhostapp.com/Oferta/index/0', {
+                    method: "GET",
+                    headers: headers
+                });
+
+                if (!response.ok) {
+                    throw new Error('La respuesta de la red no fue exitosa');
+                }
+                const data = await response.json();
+                console.log(data)
+            } catch (error) {
+                console.error('Hubo un problema con la solicitud fetch:', error);
+            }
+        }
+        consultaApi()
+    }, []);
+
+
+
     return (
       <>
         <View style={styles.maincontainer}>
