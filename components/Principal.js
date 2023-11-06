@@ -60,7 +60,7 @@ export default function Principal({ url }) {
           }
           const data = await response.json();
           setFlightData(data);
-          console.log(data);
+          //console.log(data);
         } catch (error) {
           console.error("Hubo un problema con la solicitud fetch:", error);
         }

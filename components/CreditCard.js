@@ -15,9 +15,11 @@ import {
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function CreditCard({ route }) {
   const { flightData } = route.params;
+  console.log("DATOS QUE SE GUARDAN:",flightData);
   const navigation = useNavigation();
   const [cardNumber, setCardNumber] = useState(""); //ESTADO PARA EL NUMERO DE LA TARJETA
   // const [dateEnd, setDateEnd] = useState('');
@@ -52,7 +54,7 @@ function CreditCard({ route }) {
     const cvvRegex = /^[0-9]{3,4}$/;
     //Obteniendo los ultimos 2 valores del año actual
     const currentYear = new Date().getFullYear().toString().slice(-2);
-
+        
     if (
       cardNumberRegex.test(cardNumber) &&
       expiryDateRegex.test(expiryMonth + "/" + expiryYear) &&
@@ -210,6 +212,8 @@ function CreditCard({ route }) {
                 <Text>Fecha de salida: {flightData.Fecha_inicio}</Text>
                 <Text>Aerolinea: {flightData.Nombre_aerolinea}</Text>
                 <Text>TOTAL PAGADO: ${flightData.Precio}</Text>
+                
+                
               </View>
             )}
             <View
