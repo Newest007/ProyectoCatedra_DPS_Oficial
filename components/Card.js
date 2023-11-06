@@ -12,6 +12,7 @@ function Card({url}) {
     const [origen, setOrigen] = useState("")
     const [aerolinea, setAerolinea] = useState("")
     const [hora, setHora] = useState("")
+    const [imagen, setImagen] = useState("")
     const [listaVuelos, setListaVuelos] = useState("")
 
     let headers = new Headers();
@@ -36,12 +37,14 @@ function Card({url}) {
                 }
 
                 const data = await response.json();
-                console.log(data)
+                //console.log(data)
                 const precios = data.map(vuelo => vuelo.Precio);
                 const destinos = data.map(vuelo => vuelo.Destino_v);
                 const origenes = data.map(vuelo => vuelo.Origen_v);
                 const aerolinea = data.map(vuelo => vuelo.Nombre_aerolinea);
                 const hora = data.map(vuelo => vuelo.Hora_salida)
+                const imagenes = data.map(vuelo => {setImagen(vuelo.imagen)
+                })
                 const vuelos = data.map(vuelo => vuelo)
 
                 setPrecio(precios)
@@ -64,7 +67,7 @@ function Card({url}) {
     //MODAL
     const[openModal, setOpenModal]=React.useState(false);
 
-    function modal_render(aerolinea, origen, destino, precio  ){
+    function modal_render(aerolinea, origen, destino, precio,imagen){
         return(
             <Modal visible={openModal} animationType="slide" transparent={true}>
 
@@ -75,10 +78,8 @@ function Card({url}) {
                         
                         <Image
                         style={styles.imgini}
-                        source={require('../src/img/ny.jpg')}
+                        source={{ uri: imagen }}
                         />
-                        
-                        
                         <Text>Operado por: {aerolinea} </Text>
                         <Text>Origen: {origen}   </Text>
                         <Text>Destino: {destino} </Text>
@@ -105,14 +106,14 @@ function Card({url}) {
             <View style={styles.itemContainer}>
                 <Image
                     style={styles.imgini}
-                    source={require('../src/img/ny.jpg')}
+                    source={{ uri: imagen }}
                 />
                 <Text style={styles.tituloini}>{destino}</Text>
                 <TouchableHighlight style={styles.boton}  onPress={()=>setOpenModal(true)}>
                     <Text style={styles.botonTexto}>${precio}</Text>
                 </TouchableHighlight>
             </View>
-            {modal_render(aerolinea,origen, destino, precio)
+            {modal_render(aerolinea,origen, destino, precio,imagen)
             }
         </View>
 

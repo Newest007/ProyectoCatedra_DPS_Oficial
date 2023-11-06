@@ -64,7 +64,27 @@ const Login = () => {
             AsyncStorage.setItem('userName', data.user.givenName);
             AsyncStorage.setItem('userLastName', data.user.familyName);
             AsyncStorage.setItem('userEmail', data.user.email);
+            const datosUsuario = new FormData();
+                    datosUsuario.append('Nombres', data.user.givenName);
+                    datosUsuario.append('Apellidos', data.user.familyName);
+                    datosUsuario.append('correo_usuario', data.user.email);
 
+                    const guardarDatosUsuarioEnBase = async () => {
+                        try {
+                            const response = await axios.post('https://lis03l2023gc180313.000webhostapp.com/Usuario/index/', datosUsuario, {
+                                headers: {
+                                    'Accept': '*/*',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Connection': 'keep-alive',
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            });
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+                    }
+                    guardarDatosUsuarioEnBase()
+            AsyncStorage.setItem('userEmail', data.user.email);
             navigation.navigate('Principal')
         })
     }
