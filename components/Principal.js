@@ -100,6 +100,17 @@ export default function Principal({ url }) {
           >
             <View style={styles.vistamodal}>
               <View style={styles.modal}>
+                <Image
+                  style={{ height: 60, width: "90%" }}
+                  source={require("../src/img/Logo1-sfondo.png")}
+                ></Image>
+
+{selectedFlight && (
+  <Image
+    style={styles.imgini}
+    source={{ uri: selectedFlight.imagen }}
+  />
+)}
                 <Text style={styles.subtitulo}>Información del vuelo</Text>
                 {selectedFlight && (
                   <View
@@ -124,17 +135,38 @@ export default function Principal({ url }) {
                     width: "100%",
                   }}
                 >
-                  <Button
-                    title="Cerrar"
+                  <TouchableOpacity
                     onPress={() => setModalVisibleResult(false)}
-                  />
-                  <Button
-                    title="Comprar"
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      backgroundColor: "#EA5F5F",
+                      padding: 5,
+                      borderRadius: 10,
+                      marginRight: 5,
+                      borderWidth: 1,
+                      borderColor: "red",
+                    }}
+                  >
+                    <Text style={{ color: "white" }}>Salir</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
                     onPress={() => {
                       setModalVisibleResult(false);
-                      navigation.navigate("CreditCard"); 
+                      navigation.navigate("CreditCard",{flightData:selectedFlight});
                     }}
-                  />
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      backgroundColor: "#69C353",
+                      padding: 5,
+                      borderRadius: 10,
+                      marginLeft: 5,
+                    }}
+                  >
+                    <Text style={{ color: "white" }}>Continuar</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -203,6 +235,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: "center",
+  },
+  imgini: {
+    width: "100%",
+    height: 200,
+    marginVertical: 5,
+    borderRadius: 15,
+  },
+  modal_1: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'transparent',
+  },
+  modal_inter: {
+    backgroundColor: "white",
+    padding: 15,
+    width: "90%",
+    height: 500,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "#2c278d",
   },
 
   resultscontainer: {
