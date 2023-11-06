@@ -12,6 +12,7 @@ export default function Form() {
     const [apellido, setApellido] = useState('');
     const [pasaporte, setPasaporte] = useState('');
     const [correo, setCorreo] = useState('');
+    const [numTelefono, setNumTelefono] = useState('')
 
     const navigation = useNavigation();
 
@@ -51,6 +52,7 @@ export default function Form() {
                     datosUsuario.append('Apellidos', apellido);
                     datosUsuario.append('dui_passport', pasaporte);
                     datosUsuario.append('correo_usuario', correo);
+                    datosUsuario.append('telefono',numTelefono);
 
                     const guardarDatos = async () => {
                         try {
@@ -138,7 +140,7 @@ export default function Form() {
                             <View style={{ backgroundColor: "blue", justifyContent: "center", width: "15%", borderTopLeftRadius: 15, borderBottomLeftRadius: 15 }}>
                                 <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>+503</Text>
                             </View>
-                            <TextInput style={{ backgroundColor: '#dcdcdc', width: "85%", borderTopRightRadius: 15, borderBottomRightRadius: 15 }}
+                            <TextInput onChangeText={(text) => setNumTelefono(text)} style={{ backgroundColor: '#dcdcdc', width: "85%", borderTopRightRadius: 15, borderBottomRightRadius: 15 }}
                             />
                         </View>
                     </View>

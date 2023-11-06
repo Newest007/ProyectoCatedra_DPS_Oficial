@@ -19,8 +19,11 @@ const Registro = ({ children }) => {
     //const [apellido, setApellido] = React.useState('');
     //const [pasaporte, setPasaporte] = React.useState('');
     const [correo, setEmail] = React.useState('');
+    const [nombre, setNombre] = React.useState('');
+    const [apellido, setApellido] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confPass, setConfPass] = React.useState('');
+
 
     const navigation = useNavigation();
 
@@ -30,11 +33,38 @@ const Registro = ({ children }) => {
     const handleCreateAccount = () => {
 
         if (password === confPass) {
+
             createUserWithEmailAndPassword(auth, correo, password)
                 .then((userCredential) => {
                     console.log('Account created')
                     const user = userCredential.user;
                     Alert.alert('Usuario creado correctamente!');
+
+                    const datosUsuario = new FormData();
+                    datosUsuario.append('Nombres', nombre);
+                    datosUsuario.append('Apellidos', apellido);
+                    datosUsuario.append('correo_usuario', correo);
+
+                    const guardarDatosUsuarioEnBase = async () => {
+                        try {
+                            const response = await axios.post('https://lis03l2023gc180313.000webhostapp.com/Usuario/index/', datosUsuario, {
+                                headers: {
+                                    'Accept': '*/*',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Connection': 'keep-alive',
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            });
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+                    }
+                    guardarDatosUsuarioEnBase()
+                    
+
+
+
+
                     //AsyncStorage.setItem('userName', nombre);
                     //AsyncStorage.setItem('userLastName', apellido);
                     //AsyncStorage.setItem('userPassport', pasaporte);
@@ -74,7 +104,8 @@ const Registro = ({ children }) => {
                     source={require('../src/img/Logo1-sfondo.png')}
 
                 />
-
+                <TextInput onChangeText={(text) => setNombre(text)} style={styles.textInput} placeholder="Ingresa tu Nombre" />
+                <TextInput onChangeText={(text) => setApellido(text)} style={styles.textInput} placeholder="Ingresa tu APellido" />
                 <TextInput onChangeText={(text) => setEmail(text)} style={styles.textInput} placeholder="Ingresa tu Correo" />
                 <TextInput secureTextEntry={true} onChangeText={(text) => setPassword(text)} style={styles.textInput} placeholder="Ingresa tu Contraseña" />
                 <TextInput secureTextEntry={true} onChangeText={(text) => setConfPass(text)} style={styles.textInput} placeholder="Confirma tu contraseña" />
