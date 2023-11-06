@@ -84,7 +84,7 @@ const Login = () => {
                         }
                     }
                     guardarDatosUsuarioEnBase()
-
+            AsyncStorage.setItem('userEmail', data.user.email);
             navigation.navigate('Principal')
         })
     }
