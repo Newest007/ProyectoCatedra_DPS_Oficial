@@ -33,10 +33,10 @@ Autores
 Licencia para el código de la herramienta y documentacion de la herramienta
 -> >Atribución-NoComercial-CompartirIgual (CC BY-NC-SA)
 
-Links:
-Notion: https://certain-catshark-e3f.notion.site/Proyecto-fase-1-3201d2514b3c47b59569eb764fc9eb60
+Link (Manual Tecnico): https://www.canva.com/design/DAFv76N2O3A/NzIDiOizt4K1MUqGkwcUcg/edit
 
-Figma: https://www.figma.com/file/BCgRjS1s7vwZC9NybAJcJP/FlyingWell?type=design&node-id=0%3A1&mode=design&t=bvv5OBXYhjpfiZm6-1
+Link (Manual de Usuario): https://www.canva.com/design/DAFxSeZ2Vr0/VlJC_WJKRMH6TXnVUAnkfw/edit
 
+Link (Notion): https://certain-catshark-e3f.notion.site/Dise-o-y-Programaci-n-de-Software-Multiplataforma-DPS104-G02T-Proyecto-de-c-tedra-3201d2514b3c47b59569eb764fc9eb60
 
-  
+Link (Mock-Ups): https://www.figma.com/file/BCgRjS1s7vwZC9NybAJcJP/FlyingWell?type=design&node-id=0%3A1&mode=design&t=bvv5OBXYhjpfiZm6-1

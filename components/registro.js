@@ -1,14 +1,91 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, Button, SafeAreaView, Image } from 'react-native';
+import { View, StyleSheet, TextInput, Button, SafeAreaView, Image, Alert } from 'react-native';
 import Svg, { Defs, Rect, LinearGradient, Stop } from 'react-native-svg';
 
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../firebase-config';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import axios from 'axios';
 const FROM_COLOR = 'rgba(247, 247, 247, 1)';
 const TO_COLOR = 'rgba(45, 40, 122, 1)';
 
-const Background = ({ children }) => {
+const Registro = ({ children }) => {
+
+    //const [usuario, setUser] = React.useState('');
+    //const [nombre, setNombre] = React.useState('');
+    //const [apellido, setApellido] = React.useState('');
+    //const [pasaporte, setPasaporte] = React.useState('');
+    const [correo, setEmail] = React.useState('');
+    const [nombre, setNombre] = React.useState('');
+    const [apellido, setApellido] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confPass, setConfPass] = React.useState('');
+
+
+    const navigation = useNavigation();
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const handleCreateAccount = () => {
+
+        if (password === confPass) {
+
+            createUserWithEmailAndPassword(auth, correo, password)
+                .then((userCredential) => {
+                    console.log('Account created')
+                    const user = userCredential.user;
+                    Alert.alert('Usuario creado correctamente!');
+
+                    const datosUsuario = new FormData();
+                    datosUsuario.append('Nombres', nombre);
+                    datosUsuario.append('Apellidos', apellido);
+                    datosUsuario.append('correo_usuario', correo);
+
+                    const guardarDatosUsuarioEnBase = async () => {
+                        try {
+                            const response = await axios.post('https://lis03l2023gc180313.000webhostapp.com/Usuario/index/', datosUsuario, {
+                                headers: {
+                                    'Accept': '*/*',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Connection': 'keep-alive',
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            });
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+                    }
+                    guardarDatosUsuarioEnBase()
+                    
+
+
+
+
+                    //AsyncStorage.setItem('userName', nombre);
+                    //AsyncStorage.setItem('userLastName', apellido);
+                    //AsyncStorage.setItem('userPassport', pasaporte);
+                    AsyncStorage.setItem('userEmail', correo);
+                    navigation.navigate('Principal');
+                    //console.log(user);
+                })
+                .catch(error => {
+                    console.log(error)
+                    Alert.alert(error.message)
+                })
+        }
+        else {
+            Alert.alert('Las contraseñas no coinciden')
+        }
+    }
+
+
     return (
         <SafeAreaView style={styles.container}>
-            
+
             <View style={styles.gradientContainer}>
                 <Svg height="100%" width="100%" style={StyleSheet.absoluteFillObject}>
                     <Defs>
@@ -25,25 +102,22 @@ const Background = ({ children }) => {
                 <Image
                     style={styles.logo}
                     source={require('../src/img/Logo1-sfondo.png')}
-                    
-                />
 
-                <TextInput style={styles.textInput} placeholder="Enter Your User Name" />
-                <TextInput style={styles.textInput} placeholder="Enter Your Email" />
-                <TextInput style={styles.textInput} keyboardType="phone-pad"  placeholder="Enter Your Phone Number" />
-                <TextInput style={styles.textInput} placeholder="Enter Your Password" />
+                />
+                <TextInput onChangeText={(text) => setNombre(text)} style={styles.textInput} placeholder="Ingresa tu Nombre" />
+                <TextInput onChangeText={(text) => setApellido(text)} style={styles.textInput} placeholder="Ingresa tu APellido" />
+                <TextInput onChangeText={(text) => setEmail(text)} style={styles.textInput} placeholder="Ingresa tu Correo" />
+                <TextInput secureTextEntry={true} onChangeText={(text) => setPassword(text)} style={styles.textInput} placeholder="Ingresa tu Contraseña" />
+                <TextInput secureTextEntry={true} onChangeText={(text) => setConfPass(text)} style={styles.textInput} placeholder="Confirma tu contraseña" />
 
                 <View style={styles.buttonContainer}>
                     <Button
-                        title="Sign Up"
+                        title="Guardar Datos"
                         color="#0e64d1"
-                        onPress={() => {
-                            // manejo boton
-                        }}
+                        onPress={handleCreateAccount}
                     />
                 </View>
 
-                <Text style={styles.text}>Already Have An Account? Login</Text>
             </View>
 
             {children}
@@ -89,7 +163,7 @@ const styles = StyleSheet.create({
         height: 45,
         marginVertical: 10,
         borderRadius: 20,
-        
+
     },
     text: {
         color: 'white',
@@ -97,4 +171,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Background;
+export default Registro;
